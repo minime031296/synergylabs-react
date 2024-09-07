@@ -11,9 +11,7 @@ const Users = ({ users }) => {
   return (
     <Card className="h-full w-full overflow-scroll p-4">
       
-      <Link>
-        Create New User
-      </Link>
+      
 
       <table className="w-full min-w-max table-auto text-left">
         <thead>
