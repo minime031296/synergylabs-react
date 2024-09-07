@@ -1,29 +1,14 @@
-import { useEffect, useState } from 'react';
-import './App.css';
-import Users from './components/Users';
+import React from 'react'
+import AllRoutes from './Routes/AllRoutes'
+import { Navbar } from '@material-tailwind/react'
 
-function App() {
-  const [users, setUsers] = useState([]);
-
-  async function fetchUsers() {
-    try {
-      let response = await fetch('https://jsonplaceholder.typicode.com/users');
-      let data = await response.json();
-      setUsers(data);
-    } catch (error) {
-      console.error('Error fetching users data:', error);
-    }
-  }
-
-  useEffect(() => {
-    fetchUsers();
-  }, []);
-
+const App = () => {
   return (
-    <>
-      <Users users={users} />
-    </>
-  );
+    <div>
+      <Navbar/>
+      <AllRoutes/>
+    </div>
+  )
 }
 
-export default App;
+export default App

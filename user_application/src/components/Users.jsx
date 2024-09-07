@@ -1,87 +1,78 @@
-import { Card, Typography, Button } from "@material-tailwind/react";
+import React, { useEffect, useState } from 'react';
+import { Card, Typography, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, useTheme, useMediaQuery } from '@mui/material';
+import { Link } from 'react-router-dom';
+import DeleteUser from './DeleteUser';
 
-const TABLE_HEAD = ["Name", "Username", "Email", ""];
+const TABLE_HEAD = ["Name", "Username", "Email", "Phone", "Website", "Edit", "Delete"];
 
-const Users = ({ users }) => {
-  
+const Users = () => {
+  const [users, setUsers] = useState([]);
+
+  async function fetchUsers() {
+    try {
+      let response = await fetch('https://jsonplaceholder.typicode.com/users');
+      let data = await response.json();
+      setUsers(data);
+    } catch (error) {
+      console.error('Error fetching users data:', error);
+    }
+  }
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+
   if (!Array.isArray(users) || users.length === 0) {
-    return <p>No users available</p>;
+    return <Typography variant="body1" color="textSecondary">No users available</Typography>;
   }
 
   return (
-    <Card className="h-full w-full overflow-scroll p-4">
-      
-      
-
-      <table className="w-full min-w-max table-auto text-left">
-        <thead>
-          <tr>
-            {TABLE_HEAD.map((head) => (
-              <th
-                key={head}
-                className="border-b border-blue-gray-100 bg-blue-gray-50 p-4"
-              >
-                <Typography
-                  variant="small"
-                  color="blue-gray"
-                  className="font-normal leading-none opacity-70"
-                >
-                  {head}
-                </Typography>
-              </th>
+    <Card sx={{ p: 4 }}>
+      <TableContainer component={Paper} sx={{ overflowX: 'auto' }}>
+        <Table sx={{ minWidth: 600, tableLayout: isSmallScreen ? 'auto' : 'fixed' }}>
+          <TableHead>
+            <TableRow>
+              {TABLE_HEAD.map((head) => (
+                <TableCell key={head} sx={{ fontWeight: 'bold' }}>
+                  <Typography variant="subtitle1">{head}</Typography>
+                </TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {users.map(({ id, name, username, email, phone, website }) => (
+              <TableRow key={id}>
+                <TableCell>
+                  <Typography variant="body2">{name}</Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography variant="body2">{username}</Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography variant="body2">{email}</Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography variant="body2">{phone}</Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography variant="body2">{website}</Typography>
+                </TableCell>
+                <TableCell>
+                  <Link to={`/singleuser/${id}`} style={{ textDecoration: 'none' }}>
+                    <Button variant="contained" color="primary">View User</Button>
+                  </Link>
+                </TableCell>
+                <TableCell>
+                  <DeleteUser/>
+                </TableCell>
+              </TableRow>
             ))}
-          </tr>
-        </thead>
-        <tbody>
-          {users.map(({ name, username, email }, index) => {
-            const isLast = index === users.length - 1;
-            const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-150";
-
-            return (
-              <tr key={name}>
-                <td className={classes}>
-                  <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className="font-normal"
-                  >
-                    {name}
-                  </Typography>
-                </td>
-                <td className={classes}>
-                  <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className="font-normal"
-                  >
-                    {username}
-                  </Typography>
-                </td>
-                <td className={classes}>
-                  <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className="font-normal"
-                  >
-                    {email}
-                  </Typography>
-                </td>
-                <td className={classes}>
-                  <Typography
-                    as="a"
-                    href="#"
-                    variant="small"
-                    color="blue-gray"
-                    className="font-medium text-red-500 hover:text-red-600"
-                  >
-                    Delete
-                  </Typography>
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+          </TableBody>
+        </Table>
+      </TableContainer>
     </Card>
   );
 };
