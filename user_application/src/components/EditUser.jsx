@@ -10,9 +10,9 @@ const initialState = {
 };
 
 const EditUser = ({ id, handleClose }) => {
-  const [newDetails, setNewDetails] = useState(initialState);
+    const [newDetails, setNewDetails] = useState(initialState);
 
-  useEffect(() => {
+    useEffect(() => {
     const fetchUserDetails = async () => {
       try {
         const response = await fetch(`https://jsonplaceholder.typicode.com/users/${id}`);
@@ -33,35 +33,35 @@ const EditUser = ({ id, handleClose }) => {
     };
 
     fetchUserDetails();
-  }, [id]);
+    }, [id]);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setNewDetails((prevDetails) => ({
-      ...prevDetails,
-      [name]: value,
-    }));
-  };
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setNewDetails((prevDetails) => ({
+        ...prevDetails,
+        [name]: value,
+        }));
+    };
 
-  const handleSubmit = async () => {
+    const handleSubmit = async () => {
     try {
-      const response = await fetch(`https://jsonplaceholder.typicode.com/users/${id}`, {
-        method: "PUT",
-        body: JSON.stringify({
-          name: newDetails.Name,
-          username: newDetails.Username,
-          email: newDetails.Email,
-          phone: newDetails.Phone,
-          website: newDetails.Website,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+        const response = await fetch(`https://jsonplaceholder.typicode.com/users/${id}`, {
+            method: "PUT",
+            body: JSON.stringify({
+                name: newDetails.Name,
+                username: newDetails.Username,
+                email: newDetails.Email,
+                phone: newDetails.Phone,
+                website: newDetails.Website,
+            }),
+            headers: {
+                    "Content-Type": "application/json",
+                    },
+            });
 
-      if (!response.ok) {
-        throw new Error(`Failed to update user: ${response.statusText}`);
-      }
+        if (!response.ok) {
+                    throw new Error(`Failed to update user: ${response.statusText}`);
+                    }
 
       const updatedUser = await response.json();
       setNewDetails(updatedUser); 
@@ -71,33 +71,36 @@ const EditUser = ({ id, handleClose }) => {
     }
   };
 
-  return (
-    <Dialog open onClose={handleClose}>
-      <DialogTitle>Edit User Profile</DialogTitle>
-      <DialogContent>
-        {Object.keys(initialState).map((key) => (
-          <TextField
-            key={key}
-            margin="normal"
-            fullWidth
-            variant="outlined"
-            label={key}
-            name={key}
-            value={newDetails[key]}
-            onChange={handleChange}
-            type={key === 'Email' ? 'email' : 'text'}
-          />
-        ))}
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={handleClose} color="secondary">
-          Cancel
-        </Button>
-        <Button onClick={handleSubmit} variant="contained" color="primary">
-          Confirm
-        </Button>
-      </DialogActions>
-    </Dialog>
+    return (
+        <Dialog open onClose={handleClose}>
+            <DialogTitle>Edit User Profile</DialogTitle>
+            
+            <DialogContent>
+                {Object.keys(initialState).map((key) => (
+                    <TextField
+                        key={key}
+                        margin="normal"
+                        fullWidth
+                        variant="outlined"
+                        label={key}
+                        name={key}
+                        value={newDetails[key]}
+                        onChange={handleChange}
+                        type={key === 'Email' ? 'email' : 'text'}
+                    />
+                 ))}
+            </DialogContent>
+            
+            <DialogActions>
+                <Button onClick={handleClose} color="secondary">
+                Cancel
+                </Button>
+                <Button onClick={handleSubmit} variant="contained" color="primary">
+                Confirm
+                </Button>
+            </DialogActions>
+            
+        </Dialog>
   );
 };
 

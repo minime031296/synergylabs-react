@@ -7,28 +7,31 @@ const Navbar = () => {
     <AppBar
       position="sticky"
       sx={{ 
-        backgroundColor: 'black ', 
-        boxShadow: 'none' ,
-        opacity: 10
+        backgroundColor: 'black', 
+        boxShadow: 'none',
+        opacity: 1
       }}
     >
       <Toolbar
         sx={{ 
           backgroundColor: 'transparent', 
-          opacity: 0.7 ,
-          backdropFilter:"inherit 30px"
+          opacity: 0.7,
+          backdropFilter: 'blur(10px)'
         }}
       >
         <Container maxWidth="lg" sx={{ display: 'flex', justifyContent: 'space-between' }}>
           <Typography variant="h6" component="div">
-            My App
+            <img src="https://cleanspeak.com/images/blog/User-Mngmt.png" alt="" style={{width:"40px"}}/>
           </Typography>
           <div>
-            <Button color="black" component={Link} to="/users">
+            <Button color="inherit" component={Link} to="/">
+              Home
+            </Button>
+            <Button color="inherit" component={Link} to="/users">
               Users
             </Button>
-            <Button color="black" component={Link} to="/newuser">
-              <CreateNewUser/>
+            <Button color="inherit" component={Link} to="/newuser">
+              + User
             </Button>
           </div>
         </Container>
